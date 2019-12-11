@@ -1,6 +1,8 @@
+const fs = require('fs');
+
+
 async function short(input) { 
     
-    const fs = require('fs');
     const now = require('performance-now');
     
     var msg = '';
@@ -61,13 +63,47 @@ async function fetch() {
 
 async function run() {
     var i;
-    for(i = 1600;  i < 1800; i++) {
+    for(i = 1650;  i < 1800; i++) {
         await short('/Users/teddyklausner/Downloads/aclImdb 2/train/unsup/' + i + '_0.txt');
     }
 }
 
-run();
+function parse(text) {
+    var data = fs.readFileSync(text, 'utf8');
+    var digests = [];
+    
+    while(data.length > 0) {
+        
+        // fix dig
+        var dig = data.substring(0, data.indexOf('}'));
+        dig = dig + ',' + data.substring(data.indexOf('}{') + 2, data.indexOf('}\n') + 1);
+        dig = dig.substring(0, dig.indexOf('"file"') + 7) + '"' + dig.substring(dig.indexOf('"file"') + 7, dig.indexOf(',"time"')) + '"' + dig.substring(dig.indexOf(',"time"'));
 
-//short('/Users/teddyklausner/Downloads/aclImdb 2/train/unsup/422_0.txt');
+        var obj;
+        try {
+        // parse text to json
+            obj = JSON.parse(dig, function(key, value) {
+                return value;
+            });
+            
+            digests.push(obj);
+            
+        } catch(err) {
+            console.log(err);
+        }
+        data = data.substring(data.indexOf('}\n') + 3);
+    }
+    
+    //fs.appendFileSync('output2.txt', JSON.stringify(digests));
+    
+    return digests;
+    }
+
+// parse file into json objects
+digests = parse('output.txt');
+
+
+digests.forEach(dig => fs.appendFileSync('time.txt', dig.time + ' '));
+    
 
 //http://ai.stanford.edu/~amaas/data/sentiment/
