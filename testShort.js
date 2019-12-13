@@ -103,7 +103,7 @@ function parse(text) {
 digests = parse('output.txt');
 
 
-digests.forEach(dig => fs.appendFileSync('time.txt', dig.time + ' '));
+digests.forEach(dig => fs.appendFileSync('reductions.csv', dig.reduction + ' '));
     
 
 //http://ai.stanford.edu/~amaas/data/sentiment/
