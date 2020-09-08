@@ -1,6 +1,6 @@
 async function start() { //ADDED BY ME
     console.time()
-    const API_KEY = '7c99f806023f4ead9bd40b6ac2644969';
+    const API_KEY = '';
     const fetch = require("node-fetch"); //ADDED BY ME
 
     try {
